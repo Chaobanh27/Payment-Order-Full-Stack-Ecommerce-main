@@ -11,8 +11,7 @@ const app = express()
 app.use(express.json())
 app.use(cookieParser())
 app.use(cors({
-  origin: "*", // hoặc "*" để cho phép mọi origin
-  credentials: true
+  origin: "*"
 }));
 app.get('/', (req, res)=> res.send('Server is running'))
 
