@@ -1,26 +1,28 @@
-import express from "express";
-import cors from "cors";
-import cookieParser from "cookie-parser";
-import dotenv from "dotenv";
-import connectDB from "../config/db.js";
-import router from "../routes/index.js";
+const express = require('express')
+const cors = require('cors')
+const cookieParser = require('cookie-parser')
+require('dotenv').config()
+const connectDB = require('./config/db')
+const router = require('./routes')
 
-dotenv.config();
 
-const app = express();
+const app = express()
 
-app.use(express.json());
-app.use(cookieParser());
-
+app.use(express.json())
+app.use(cookieParser())
 app.use(cors({
-  origin: "http://localhost:3000", // frontend local
-  credentials: true
+  origin: "*", // hoặc "*" để cho phép mọi origin
 }));
+app.get('/', (req, res)=> res.send('Server is running'))
 
-app.get("/", (req, res) => res.send("Server is running"));
-app.use("/api", router);
+app.use("/api",router)
 
-export default async function handler(req, res) {
-  await connectDB();
-  return app(req, res);
-}
+const PORT = 8080 || process.env.PORT
+
+
+connectDB().then(()=>{
+    app.listen(PORT,()=>{
+        console.log("connnect to DB")
+        console.log("Server is running "+PORT)
+    })
+})
